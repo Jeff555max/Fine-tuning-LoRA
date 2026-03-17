@@ -116,7 +116,7 @@ def load_model_and_tokenizer(base_model_name, lora_model_path=None):
     
     return model, tokenizer
 
-def generate_response(model, tokenizer, prompt, max_length=512, temperature=0.7, top_p=0.9, top_k=50):
+def generate_response(model, tokenizer, prompt, max_new_tokens=256, temperature=0.7, top_p=0.9, top_k=50):
     """
     Генерирует ответ модели на промпт
     
@@ -124,7 +124,7 @@ def generate_response(model, tokenizer, prompt, max_length=512, temperature=0.7,
         model: модель
         tokenizer: токенизатор
         prompt: входной промпт
-        max_length: максимальная длина генерируемого текста
+        max_new_tokens: максимальное количество новых токенов для генерации
         temperature: температура для генерации (чем выше, тем более случайно)
         top_p: nucleus sampling параметр
         top_k: top-k sampling параметр
@@ -143,7 +143,7 @@ def generate_response(model, tokenizer, prompt, max_length=512, temperature=0.7,
     with torch.no_grad():
         outputs = model.generate(
             inputs,
-            max_length=max_length,
+            max_new_tokens=max_new_tokens,
             temperature=temperature,
             top_p=top_p,
             top_k=top_k,
@@ -162,7 +162,7 @@ def generate_response(model, tokenizer, prompt, max_length=512, temperature=0.7,
     
     return response
 
-def chat_loop(model, tokenizer, system_prompt="", max_length=512, temperature=0.7):
+def chat_loop(model, tokenizer, system_prompt="", max_length=256, temperature=0.7):
     """
     Основной цикл чата
     
@@ -229,7 +229,7 @@ def chat_loop(model, tokenizer, system_prompt="", max_length=512, temperature=0.
                 model, 
                 tokenizer, 
                 prompt, 
-                max_length=max_length,
+                max_new_tokens=max_length,
                 temperature=temperature
             )
             
@@ -259,7 +259,7 @@ def main():
     parser.add_argument("--base_model", type=str, required=True, help="Имя базовой модели с HuggingFace")
     parser.add_argument("--lora_model", type=str, default=None, help="Путь к дообученной LoRA модели")
     parser.add_argument("--system_prompt", type=str, default="", help="Системный промпт")
-    parser.add_argument("--max_length", type=int, default=512, help="Максимальная длина ответа")
+    parser.add_argument("--max_length", type=int, default=256, help="Максимальное количество новых токенов")
     parser.add_argument("--temperature", type=float, default=0.7, help="Температура генерации")
     
     args = parser.parse_args()
