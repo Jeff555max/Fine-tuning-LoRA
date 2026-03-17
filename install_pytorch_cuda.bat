@@ -8,8 +8,8 @@ echo Uninstalling CPU version of PyTorch...
 pip uninstall -y torch torchvision torchaudio
 
 echo.
-echo Installing PyTorch with CUDA 12.1 support...
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+echo Installing PyTorch with CUDA 12.4 support (torch 2.6+)...
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
 
 echo.
 echo ============================================
